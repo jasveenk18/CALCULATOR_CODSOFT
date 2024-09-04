@@ -34,6 +34,102 @@
             <button type="button" class="equal-sign" value="=">=</button>
         </div>
     </div>
-    <script src="scripts.js"></script>
+    <script >
+        const calculatorScreen = document.getElementById('calculator-screen');
+const keys = document.querySelector('.calculatorkeys');
+let currentInput = '';
+let previousInput = '';
+let operator = '';
+
+keys.addEventListener('click', event => {
+    const { target } = event;
+    const { value } = target;
+
+    if (!target.matches('button')) {
+        return;
+    }
+
+    switch (value) {
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+            handleOperator(value);
+            break;
+        case '=':
+            calculate();
+            break;
+        case 'all-clear':
+            clear();
+            break;
+        case '.':
+            inputDecimal();
+            break;
+        default:
+            inputNumber(value);
+    }
+
+    updateScreen();
+});
+
+function handleOperator(nextOperator) {
+    if (currentInput === '') {
+        return;
+    }
+
+    if (previousInput !== '') {
+        calculate();
+    }
+
+    operator = nextOperator;
+    previousInput = currentInput;
+    currentInput = '';
+}
+
+function calculate() {
+    let result;
+
+    switch (operator) {
+        case '+':
+            result = parseFloat(previousInput) + parseFloat(currentInput);
+            break;
+        case '-':
+            result = parseFloat(previousInput) - parseFloat(currentInput);
+            break;
+        case '*':
+            result = parseFloat(previousInput) * parseFloat(currentInput);
+            break;
+        case '/':
+            result = parseFloat(previousInput) / parseFloat(currentInput);
+            break;
+        default:
+            return;
+    }
+
+    currentInput = `${result}`;
+    operator = '';
+    previousInput = '';
+}
+
+function clear() {
+    currentInput = '';
+    previousInput = '';
+    operator = '';
+}
+
+function inputDecimal() {
+    if (!currentInput.includes('.')) {
+        currentInput += '.';
+    }
+}
+
+function inputNumber(number) {
+    currentInput = currentInput === '0' ? number : currentInput + number;
+}
+
+function updateScreen() {
+    calculatorScreen.value = currentInput;
+}
+    </script>
 </body>
 </html>
